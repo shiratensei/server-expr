@@ -11,9 +11,29 @@ router.post('/login', function (req, res) {
     var _a = req.body, email = _a.email, password = _a.password;
     //type guard
     if (email && password) {
-        res.send('Email: ' + email.toUpperCase() + "<br/>" + 'Password: ' + password);
+        if (email === 'hi@hi.com' && password === 'password') {
+            //mark this person as logged in
+            req.session = { loggedIn: true };
+            //redirect to the root route
+            res.redirect('/');
+        }
+        else {
+            res.send('Wrong email or password. Cannot log in.');
+        }
     }
     else {
         res.send('Error 422: Email or password property is missing.');
     }
+});
+router.get('/', function (req, res) {
+    if (req.session && req.session.loggedIn) {
+        res.send("\n            <div> \n                <div> You are logged in. </div>\n                <a href=\"/logout\">Logout</a>\n            </div>\n        ");
+    }
+    else {
+        res.send("\n            <div> \n                <div> You are logged out. </div>\n                <a href=\"/login\">Log in</a>\n            </div>\n        ");
+    }
+});
+router.get('/logout', function (req, res) {
+    req.session = null;
+    res.redirect('/');
 });
