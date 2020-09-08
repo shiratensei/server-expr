@@ -14,6 +14,6 @@ router.post('/login', function (req, res) {
         res.send('Email: ' + email.toUpperCase() + "<br/>" + 'Password: ' + password);
     }
     else {
-        res.send('Email or password property is missing!');
+        res.send('Error 422: Email or password property is missing.');
     }
 });

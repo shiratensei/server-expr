@@ -1,5 +1,9 @@
 import { Router, Request, Response } from 'express';
 
+interface RequestWithBody extends Request {
+    body: { [key: string]: string | undefined }
+}
+
 const router = Router();
 
 router.get('/login', (req: Request, res: Response) => {
@@ -18,7 +22,7 @@ router.get('/login', (req: Request, res: Response) => {
     `);
 });
 
-router.post('/login', (req: Request, res: Response) => {
+router.post('/login', (req: RequestWithBody, res: Response) => {
     const { email, password } = req.body;
 
     //type guard
@@ -27,7 +31,7 @@ router.post('/login', (req: Request, res: Response) => {
             'Email: ' + email.toUpperCase() + `<br/>` + 'Password: ' + password
         );
     } else {
-        res.send('Email or password property is missing!');
+        res.send('Error 422: Email or password property is missing.');
     }
 });
 
